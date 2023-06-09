@@ -1,21 +1,58 @@
 import { StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, Text, View } from "react-native";
-import { TextInput } from "react-native-web";
+import {
+  Button,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  FlatList,
+} from "react-native";
+import { useState } from "react";
 
 export default function App() {
+  const [enteredInput, setEnteredInput] = useState("");
+  const [goals, setGoal] = useState([]);
+  function goalInputHandler(enteredText) {
+    setEnteredInput(enteredText);
+  }
+  function addGoalHandler() {
+    setGoal((prev) => [...prev, { text: enteredInput, key: Math.random() }]);
+    // setEnteredInput("");
+  }
   return (
     <View style={styles.container}>
-      {/* <Text>Hello World!!!!</Text>
-      <Text>Hello World!!!!</Text>
-      <Text style={styles.text}>Hello World!!!!</Text>
-      <Button title='Tap me'/>     
-      <StatusBar style="auto" /> */}
       <View style={styles.inputContainer}>
-        {/* <TextInput style={styles.textInput} placeholder="Enter your name" /> */}
-        <Button title="Add goal" />
+        <TextInput
+          style={styles.textInput}
+          value={enteredInput}
+          placeholder="Enter your name"
+          onChangeText={goalInputHandler}
+        />
+        <Button title="Add goal" onPress={addGoalHandler} />
       </View>
+      {/* <ScrollView alwaysBounceVertical style={styles.goalsContainer}>
+        {goals.map((goal) => (
+          <Text style={styles.goalItem} key={goal}>
+            {goal}
+          </Text>
+        ))}
+      </ScrollView> */}
       <View style={styles.goalsContainer}>
-        <Text>List goals</Text>
+        <FlatList
+          data={goals}
+          alwaysBounceVertical={false}
+          keyExtractor={(item, index) => {
+            return item.id;
+          }}
+          renderItem={(itemData) => {
+            return (
+              <View style={styles.goalItem}>
+                <Text style={styles.goalText}>{itemData.item.text}</Text>
+              </View>
+            );
+          }}
+        ></FlatList>
       </View>
     </View>
   );
@@ -46,5 +83,15 @@ const styles = StyleSheet.create({
   },
   goalsContainer: {
     flex: 4,
+  },
+  goalItem: {
+    margin: 8,
+    padding: 8,
+    borderRadius: 6,
+    backgroundColor: "#5e06ac",
+    color: "white",
+  },
+  goalText: {
+    color: "white",
   },
 });
