@@ -16,6 +16,9 @@ function GoalInput(props) {
   }
 
   function addGoalHandler() {
+    if (enteredGoalText === "") {
+      return;
+    }
     props.onAddGoal(enteredGoalText);
     setEnteredGoalText("");
   }
